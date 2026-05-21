@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para ti, Angela 🎈</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Pinyon+Script&family=Raleway:wght@200;300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --sky1: #1a0a2e;
+  --sky2: #0d1a3a;
+  --sky3: #2a0a1e;
+  --gold: #e8c97a;
+  --rose: #e8799a;
+  --lavender: #b09ae8;
+  --mint: #7ae8c9;
+  --peach: #e8a07a;
+  --paper: #fdf8f0;
+  --ink: #2a1020;
+}
+
+body {
+  min-height: 100vh;
+  background: radial-gradient(ellipse at 30% 20%, #2a1040 0%, #0d1020 40%, #1a0818 100%);
+  font-family: 'Cormorant Garamond', serif;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ── FONDO ── */
+#bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 40% at 20% 10%, rgba(100,50,180,0.25) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 30% at 80% 30%, rgba(200,80,120,0.15) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 50% 90%, rgba(50,80,180,0.2) 0%, transparent 70%),
+    radial-gradient(ellipse at 30% 20%, #2a1040 0%, #0d1020 40%, #1a0818 100%);
+}
+
+#stars-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ── HEADER ── */
+.header {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 48px 20px 10px;
+  animation: fadeDown 1.2s ease both;
+}
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.header-title {
+  font-family: 'Pinyon Script', cursive;
+  font-size: clamp(2.4rem, 8vw, 4rem);
+  color: var(--gold);
+  text-shadow: 0 0 30px rgba(232,201,122,0.4);
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.header-sub {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 200;
+  font-size: 0.72rem;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: rgba(232,201,122,0.5);
+}
+
+.header-hint {
+  margin-top: 16px;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 1px;
+}
+
+/* ── ESCENA DE GLOBOS ── */
+.balloon-scene {
+  position: relative;
+  z-index: 10;
+  min-height: 75vh;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0;
+  padding: 20px 10px 60px;
+}
+
+/* ── GLOBO ── */
+.balloon-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  animation: floatBalloon var(--float-dur, 4s) ease-in-out infinite alternate;
+  animation-delay: var(--float-delay, 0s);
+  transition: transform 0.2s;
+  margin: 0 6px;
+  /* stagger entrada */
+  opacity: 0;
+  animation: floatIn 0.8s ease forwards, floatBalloon var(--float-dur,4s) ease-in-out var(--float-delay,0s) infinite alternate;
+  animation-delay: var(--enter-delay, 0s), var(--float-delay, 0s);
+}
+
+@keyframes floatIn {
+  from { opacity: 0; transform: translateY(60px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes floatBalloon {
+  from { transform: translateY(0) rotate(var(--tilt-from, -3deg)); }
+  to   { transform: translateY(-18px) rotate(var(--tilt-to, 3deg)); }
+}
+
+.balloon-wrap:hover .balloon-body {
+  filter: brightness(1.15) saturate(1.2);
+  transform: scale(1.06);
+}
+.balloon-wrap:active .balloon-body {
+  transform: scale(0.96);
+}
+
+/* cuerpo del globo */
+.balloon-body {
+  width: var(--size, 110px);
+  height: calc(var(--size, 110px) * 1.2);
+  border-radius: 50% 50% 50% 50% / 55% 55% 45% 45%;
+  background: var(--color);
+  position: relative;
+  transition: transform 0.2s, filter 0.2s;
+  box-shadow:
+    inset -12px -8px 20px rgba(0,0,0,0.25),
+    inset 6px 6px 14px rgba(255,255,255,0.3),
+    0 8px 30px rgba(0,0,0,0.35);
+}
+
+/* brillo */
+.balloon-body::before {
+  content: '';
+  position: absolute;
+  top: 12%;
+  left: 18%;
+  width: 28%;
+  height: 22%;
+  background: rgba(255,255,255,0.45);
+  border-radius: 50%;
+  transform: rotate(-30deg);
+}
+
+/* nudo */
+.balloon-knot {
+  width: 10px;
+  height: 12px;
+  background: var(--color-dark);
+  border-radius: 0 0 5px 5px;
+  margin-top: -1px;
+  position: relative;
+  z-index: 1;
+}
+
+/* hilo */
+.balloon-string {
+  width: 1px;
+  height: var(--string-h, 90px);
+  background: linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+  margin-top: 0;
+}
+
+/* número en globo */
+.balloon-num {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Pinyon Script', cursive;
+  font-size: 2rem;
+  color: rgba(255,255,255,0.7);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── MODAL / CARTA ── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5,2,15,0.75);
+  backdrop-filter: blur(6px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+.overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.card {
+  background: var(--paper);
+  border-radius: 2px;
+  max-width: 480px;
+  width: 100%;
+  padding: 44px 42px 48px;
+  position: relative;
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.6),
+    0 0 0 1px rgba(200,160,100,0.2),
+    0 2px 0 #c8a86a;
+  transform: scale(0.88) translateY(20px);
+  transition: transform 0.35s cubic-bezier(.22,1,.36,1);
+  overflow: hidden;
+}
+.overlay.active .card {
+  transform: scale(1) translateY(0);
+}
+
+/* textura papel */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.card-deco {
+  text-align: center;
+  color: var(--card-accent, #c9887a);
+  font-size: 1.3rem;
+  margin-bottom: 18px;
+  letter-spacing: 6px;
+  opacity: 0.7;
+}
+
+.card-num {
+  font-family: 'Pinyon Script', cursive;
+  font-size: 1.5rem;
+  color: var(--card-accent, #c9887a);
+  text-align: center;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.card-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--card-accent, #c9887a), transparent);
+  margin: 0 0 24px;
+  opacity: 0.4;
+}
+
+.card-text {
+  font-size: clamp(1rem, 2.8vw, 1.13rem);
+  line-height: 2;
+  color: var(--ink);
+  font-style: italic;
+  font-weight: 300;
+  text-align: center;
+}
+
+.card-text strong {
+  font-style: normal;
+  font-weight: 400;
+  color: #7a3050;
+}
+
+.card-close {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #b09070;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  font-family: 'Cormorant Garamond', serif;
+  line-height: 1;
+}
+.card-close:hover { opacity: 1; }
+
+/* ── FIRMA FINAL ── */
+.footer {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 0 20px 60px;
+  animation: fadeUp 1s ease both 1.8s;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.footer-sig {
+  font-family: 'Pinyon Script', cursive;
+  font-size: 2.4rem;
+  color: var(--gold);
+  text-shadow: 0 0 20px rgba(232,201,122,0.3);
+}
+.footer-line {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 200;
+  font-size: 0.68rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(232,201,122,0.4);
+  margin-top: 6px;
+}
+
+/* ── CHISPAS ── */
+.spark {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  animation: sparkFly 0.9s ease-out forwards;
+}
+@keyframes sparkFly {
+  0%   { opacity: 1; transform: translate(0,0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.1); }
+}
+
+
+/* ── BIENVENIDA ── */
+#welcome {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at 40% 30%, #2a1040 0%, #0d1020 50%, #1a0818 100%);
+  cursor: pointer;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+#welcome.hiding {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(1.06);
+}
+.w-title {
+  font-family: 'Pinyon Script', cursive;
+  font-size: clamp(2.8rem, 10vw, 5rem);
+  color: var(--gold);
+  text-shadow: 0 0 40px rgba(232,201,122,0.5);
+  line-height: 1;
+  margin-bottom: 14px;
+  animation: wFloat 3s ease-in-out infinite alternate;
+}
+@keyframes wFloat {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-10px); }
+}
+.w-sub {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 200;
+  font-size: 0.7rem;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: rgba(232,201,122,0.45);
+  margin-bottom: 48px;
+}
+.w-btn {
+  display: inline-block;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.55);
+  border: 1px solid rgba(232,201,122,0.25);
+  border-radius: 50px;
+  padding: 12px 36px;
+  letter-spacing: 2px;
+  transition: all 0.3s;
+  background: rgba(232,201,122,0.05);
+}
+.w-btn:hover {
+  color: rgba(255,255,255,0.85);
+  border-color: rgba(232,201,122,0.55);
+  background: rgba(232,201,122,0.1);
+}
+.w-note {
+  margin-top: 18px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 1px;
+}
+
+@media (max-width: 500px) {
+  .card { padding: 32px 24px 36px; }
+  .balloon-body { --size: 85px !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- PANTALLA DE BIENVENIDA -->
+<div id="welcome">
+  <div style="text-align:center">
+    <div class="w-title">Para ti, Angela</div>
+    <div class="w-sub">con todo mi corazón</div>
+    <div class="w-btn">✦ &nbsp; toca para abrir &nbsp; ✦</div>
+    <div class="w-note">🎵 con música</div>
+  </div>
+</div>
+
+<audio id="bgMusic" loop>
+  <source src="teamaré.mp3" type="audio/mpeg">
+</audio>
+
+<div id="bg"></div>
+<canvas id="stars-canvas"></canvas>
+
+<header class="header">
+  <div class="header-title">Para ti, mi amor</div>
+  <div class="header-sub">una carta en pedacitos de cielo</div>
+  <div class="header-hint">Toca cada globo para abrirlo 🎈</div>
+</header>
+
+<div class="balloon-scene" id="scene"></div>
+
+<footer class="footer">
+  <div class="footer-sig">Con todo mi amor, Fer 🌙</div>
+  <div class="footer-line">siempre & para siempre</div>
+</footer>
+
+<!-- OVERLAY CARTA -->
+<div class="overlay" id="overlay">
+  <div class="card" id="card">
+    <button class="card-close" id="closeBtn" aria-label="Cerrar">✕</button>
+    <div class="card-deco" id="cardDeco"></div>
+    <span class="card-num" id="cardNum"></span>
+    <div class="card-divider"></div>
+    <p class="card-text" id="cardText"></p>
+  </div>
+</div>
+
+<script>
+// ── DATOS DE LOS GLOBOS ──
+const balloons = [
+  {
+    color: '#e8799a',
+    colorDark: '#b05070',
+    accent: '#b05070',
+    symbol: '♡',
+    label: 'I',
+    text: `Mi amor por ti es <strong>incondicional.</strong><br>No tiene condiciones, no tiene límites, no tiene fin.<br>Te amo en tus días perfectos y en los que no lo son tanto.<br>Te amo entera, siempre.`
+  },
+  {
+    color: '#c8a0e8',
+    colorDark: '#8060b0',
+    accent: '#9060b8',
+    symbol: '✦',
+    label: 'II',
+    text: `Eres mi novia, sí —<br>pero antes que eso, eres <strong>mi mujer.</strong><br>La que me atrae, la que me fascina,<br>la que me roba el aliento cada vez que la veo.`
+  },
+  {
+    color: '#e8c97a',
+    colorDark: '#b09030',
+    accent: '#b08030',
+    symbol: '☽',
+    label: 'III',
+    text: `No puedo dejar de pensar en ti.<br>Apareces en mis mañanas, en mis noches,<br>en cada momento que no te tengo al lado.<br>Eres el pensamiento que <strong>siempre vuelve.</strong>`
+  },
+  {
+    color: '#7ae8c9',
+    colorDark: '#308060',
+    accent: '#308070',
+    symbol: '∞',
+    label: 'IV',
+    text: `Ya te dije que te amo,<br>y lo sigo diciendo —<br>pero lo que nadie te dice es que <strong>cada día crece más.</strong><br>Ayer te amaba. Hoy más. Mañana, aún más.`
+  },
+  {
+    color: '#e8a07a',
+    colorDark: '#b06040',
+    accent: '#b06040',
+    symbol: '✿',
+    label: 'V',
+    text: `Eres <strong>mi todo.</strong><br>Mi calma cuando todo se mueve,<br>mi alegría cuando nada tiene sentido.<br>Sin ti, me falta algo que no sé nombrar.`
+  },
+  {
+    color: '#a0b8e8',
+    colorDark: '#4060a0',
+    accent: '#4060a8',
+    symbol: '★',
+    label: 'VI',
+    text: `Eres mi vida.<br>No como figura de lenguaje —<br>sino de verdad, de huesos y corazón.<br><strong>Tú eres lo que le da sentido a mis días.</strong>`
+  },
+  {
+    color: '#e87ab0',
+    colorDark: '#a04070',
+    accent: '#a03060',
+    symbol: '♾',
+    label: 'VII',
+    text: `Mi amor por ti no acaba aquí.<br>Es eterno como el universo,<br>y si el universo llegara a acabar,<br><strong>seguiría amándote en lo que venga después.</strong><br>Eres mi eternidad.`
+  }
+];
+
+// alturas de hilo y tamaños variados
+const configs = [
+  { size: 115, stringH: 110, floatDur: '4.2s', floatDelay: '0s',   tiltFrom: '-4deg', tiltTo: '3deg',  enterDelay: '0.2s' },
+  { size: 100, stringH:  85, floatDur: '3.8s', floatDelay: '0.4s', tiltFrom: '-2deg', tiltTo: '5deg',  enterDelay: '0.4s' },
+  { size: 125, stringH: 130, floatDur: '4.6s', floatDelay: '0.2s', tiltFrom: '-5deg', tiltTo: '2deg',  enterDelay: '0.6s' },
+  { size: 108, stringH:  95, floatDur: '3.5s', floatDelay: '0.7s', tiltFrom: '-3deg', tiltTo: '4deg',  enterDelay: '0.8s' },
+  { size: 118, stringH: 115, floatDur: '4.9s', floatDelay: '0.1s', tiltFrom: '-4deg', tiltTo: '3deg',  enterDelay: '0.5s' },
+  { size: 96,  stringH:  80, floatDur: '3.9s', floatDelay: '0.5s', tiltFrom: '-2deg', tiltTo: '5deg',  enterDelay: '0.7s' },
+  { size: 130, stringH: 140, floatDur: '4.4s', floatDelay: '0.3s', tiltFrom: '-5deg', tiltTo: '2deg',  enterDelay: '0.3s' },
+];
+
+const scene = document.getElementById('scene');
+
+balloons.forEach((b, i) => {
+  const cfg = configs[i];
+  const wrap = document.createElement('div');
+  wrap.className = 'balloon-wrap';
+  wrap.style.cssText = `
+    --size: ${cfg.size}px;
+    --color: ${b.color};
+    --color-dark: ${b.colorDark};
+    --string-h: ${cfg.stringH}px;
+    --float-dur: ${cfg.floatDur};
+    --float-delay: ${cfg.floatDelay};
+    --tilt-from: ${cfg.tiltFrom};
+    --tilt-to: ${cfg.tiltTo};
+    --enter-delay: ${cfg.enterDelay};
+  `;
+  wrap.innerHTML = `
+    <div class="balloon-body">
+      <div class="balloon-num">${b.symbol}</div>
+    </div>
+    <div class="balloon-knot"></div>
+    <div class="balloon-string"></div>
+  `;
+  wrap.addEventListener('click', (e) => openCard(b, e));
+  scene.appendChild(wrap);
+});
+
+// ── ABRIR CARTA ──
+const overlay  = document.getElementById('overlay');
+const card     = document.getElementById('card');
+const cardDeco = document.getElementById('cardDeco');
+const cardNum  = document.getElementById('cardNum');
+const cardText = document.getElementById('cardText');
+const closeBtn = document.getElementById('closeBtn');
+
+function openCard(b, e) {
+  spawnSparks(e.clientX, e.clientY, b.color);
+  card.style.setProperty('--card-accent', b.accent);
+  cardDeco.textContent = b.symbol + ' · ' + b.symbol + ' · ' + b.symbol;
+  cardDeco.style.color = b.accent;
+  cardNum.textContent = b.label;
+  cardNum.style.color = b.accent;
+  card.querySelector('.card-divider').style.background =
+    `linear-gradient(to right, transparent, ${b.accent}, transparent)`;
+  cardText.innerHTML = b.text;
+  overlay.classList.add('active');
+}
+
+function closeCard() {
+  overlay.classList.remove('active');
+}
+
+closeBtn.addEventListener('click', closeCard);
+overlay.addEventListener('click', (e) => { if (e.target === overlay) closeCard(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeCard(); });
+
+// ── CHISPAS ──
+function spawnSparks(x, y, color) {
+  const colors = [color, '#ffffff', '#f0e0b0', '#ffd0e8'];
+  for (let i = 0; i < 16; i++) {
+    const s = document.createElement('div');
+    s.className = 'spark';
+    const angle = (Math.PI * 2 / 16) * i + (Math.random() - 0.5) * 0.5;
+    const dist  = 30 + Math.random() * 70;
+    s.style.left = x + 'px';
+    s.style.top  = y + 'px';
+    s.style.background = colors[Math.floor(Math.random() * colors.length)];
+    s.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+    s.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+    s.style.animationDuration = (0.5 + Math.random() * 0.5) + 's';
+    document.body.appendChild(s);
+    s.addEventListener('animationend', () => s.remove());
+  }
+}
+
+
+// ── BIENVENIDA + MÚSICA ──
+const welcome = document.getElementById('welcome');
+const bgMusic = document.getElementById('bgMusic');
+
+welcome.addEventListener('click', () => {
+  bgMusic.volume = 0;
+  bgMusic.play().catch(() => {});
+  // fade in música
+  let vol = 0;
+  const fadeIn = setInterval(() => {
+    vol = Math.min(vol + 0.02, 0.6);
+    bgMusic.volume = vol;
+    if (vol >= 0.6) clearInterval(fadeIn);
+  }, 80);
+  welcome.classList.add('hiding');
+  setTimeout(() => { welcome.style.display = 'none'; }, 900);
+});
+
+// ── ESTRELLAS ──
+(function(){
+  const canvas = document.getElementById('stars-canvas');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+  resize(); window.addEventListener('resize', () => { resize(); init(); });
+  function rand(a,b) { return a + Math.random()*(b-a); }
+  function init() {
+    const n = Math.floor(innerWidth * innerHeight / 3500);
+    stars = Array.from({length: n}, () => ({
+      x: rand(0, innerWidth), y: rand(0, innerHeight * 0.9),
+      r: rand(0.3, 1.7), alpha: rand(0.2,1),
+      speed: rand(0.005,0.02), phase: rand(0, Math.PI*2),
+      hue: Math.random() > 0.8 ? '#c8b0ff' : Math.random() > 0.6 ? '#a0c0ff' : '#f0e8d0'
+    }));
+  }
+  init();
+  let t = 0;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(s => {
+      const a = s.alpha * (0.45 + 0.55 * Math.sin(t * s.speed + s.phase));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fillStyle = s.hue;
+      ctx.globalAlpha = a;
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+    t++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>
